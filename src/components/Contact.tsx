@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function Contact() {
+  
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -13,10 +15,23 @@ export default function Contact() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     setIsSubmitted(true);
+    try {
+    const response= await fetch(API_URL, {
+      method: "POST",
+      mode: "no-cors",  
+      body: JSON.stringify(formData),
+    });
+    console.log(response)
+    alert("Submitted successfully!");
+
+  } catch (error) {
+    alert("Something went wrong");
+  }
+    
     setTimeout(() => setIsSubmitted(false), 5000);
     setFormData({ name: '', phone: '', projectType: 'Full Home Construction', message: '' });
   };
